@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lion and the Smart Mouse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header::before {
+            content: '🦁';
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3em;
+            animation: bounce 2s infinite;
+        }
+
+        .header::after {
+            content: '🐭';
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            animation: wiggle 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(-50%); }
+            40% { transform: translateY(-60%); }
+            60% { transform: translateY(-55%); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            25% { transform: translateY(-50%) rotate(5deg); }
+            75% { transform: translateY(-50%) rotate(-5deg); }
+        }
+
+        .story-section {
+            padding: 40px;
+            background: #f8f9ff;
+            border-bottom: 5px solid #e3f2fd;
+        }
+
+        .story-text {
+            font-size: 1.4em;
+            line-height: 1.8;
+            color: #2c3e50;
+            text-align: justify;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 8px solid #ff6b6b;
+        }
+
+        .quiz-section {
+            padding: 40px;
+            background: #fff3e0;
+        }
+
+        .quiz-title {
+            text-align: center;
+            font-size: 2em;
+            color: #ff6b6b;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .question {
+            background: white;
+            margin: 25px 0;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid #e3f2fd;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e3f2fd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+
+        .option.selected {
+            background: #81c784;
+            color: white;
+            border-color: #66bb6a;
+        }
+
+        .option.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #45a049;
+        }
+
+        .option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #da190b;
+        }
+
+        .check-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .result {
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .result.correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 3px solid #4caf50;
+        }
+
+        .result.incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+            border: 3px solid #f44336;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2em;
+            color: #ff6b6b;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .reset-btn {
+            background: #9c27b0;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #7b1fa2;
+            transform: translateY(-1px);
+        }
+
+        .vocabulary-section {
+            padding: 40px;
+            background: #f3e5f5;
+            border-bottom: 5px solid #e1bee7;
+        }
+
+        .vocab-title {
+            text-align: center;
+            font-size: 2em;
+            color: #9c27b0;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .vocab-exercise {
+            background: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid #e1bee7;
+        }
+
+        .vocab-exercise h3 {
+            color: #7b1fa2;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .vocab-exercise p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        /* Exercise 1: Picture Matching */
+        .matching-game {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .picture-card {
+            background: #fff3e0;
+            border: 3px solid #ffb74d;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .picture-card .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .word-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .word-btn {
+            background: #e3f2fd;
+            border: 2px solid #90caf9;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .word-btn:hover {
+            background: #90caf9;
+            color: white;
+        }
+
+        .word-btn.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #45a049;
+        }
+
+        .word-btn.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #da190b;
+        }
+
+        /* Exercise 2: Sentence Completion */
+        .sentence-completion {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sentence-item {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e3f2fd;
+        }
+
+        .sentence-item p {
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        .word-select {
+            padding: 8px 12px;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+        }
+
+        .word-select.correct {
+            border-color: #4caf50;
+            background: #c8e6c9;
+        }
+
+        .word-select.incorrect {
+            border-color: #f44336;
+            background: #ffcdd2;
+        }
+
+        /* Exercise 3: Drag and Drop */
+        .drag-drop-game {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .meanings-column, .words-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .meaning-box {
+            background: #f8f9ff;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .meaning-box span {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .drop-zone {
+            height: 40px;
+            border: 2px dashed #90caf9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            background: #e3f2fd;
+            border-color: #42a5f5;
+        }
+
+        .drop-zone.correct {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+
+        .draggable-word {
+            background: #ffb74d;
+            color: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: move;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .draggable-word:hover {
+            background: #ffa726;
+            transform: scale(1.05);
+        }
+
+        .draggable-word.dragging {
+            opacity: 0.5;
+        }
+
+        /* Exercise 4: Memory Game */
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 3px solid #90caf9;
+        }
+
+        .card-front {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-size: 2em;
+        }
+
+        .card-back {
+            background: #90caf9;
+            color: white;
+            transform: rotateY(180deg);
+            font-size: 0.9em;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .memory-card.matched .card-back {
+            background: #4caf50;
+            border-color: #45a049;
+        }
+
+        .check-vocab-btn {
+            background: linear-gradient(45deg, #9c27b0, #e91e63);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .check-vocab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .exercise-result {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .exercise-result.correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .exercise-result.incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        @media (max-width: 600px) {
+            .matching-game {
+                flex-direction: column;
+            }
+            
+            .drag-drop-game {
+                flex-direction: column;
+            }
+            
+            .memory-game {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2em; }
+            .story-text { font-size: 1.2em; }
+            .header::before, .header::after { display: none; }
+            .container { margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The Lion and the Smart Mouse</h1>
+            <p>A fun story with interactive quiz!</p>
+        </div>
+
+        <div class="story-section">
+            <div class="story-text">
+                <p><strong>Once upon a time</strong>, a big lion sleeps under a tree. A small mouse runs across the lion's nose. The lion wakes up and catches the mouse.</p>
+                
+                <p>"Please don't eat me!" says the mouse. "I am very small, but I can help you one day!"</p>
+                
+                <p>The lion laughs. "You are too small to help me!" But the lion is kind, so he lets the mouse go.</p>
+                
+                <p>The next day, hunters catch the lion in a big net. The lion tries to get out, but he cannot. He roars loudly.</p>
+                
+                <p>The small mouse hears the lion. She runs to him quickly. "Don't worry!" she says. "I can help you!" The mouse uses her sharp teeth to cut the net. Soon, the lion is free!</p>
+                
+                <p>"Thank you, little mouse!" says the lion. "You are small, but you are very smart and brave!"</p>
+                
+                <p>From that day, the lion and the mouse become good friends. They help each other every day.</p>
+            </div>
+        </div>
+
+        <div class="vocabulary-section">
+            <h2 class="vocab-title">📚 Learn New Words!</h2>
+            
+            <div class="vocab-exercise" id="vocab1">
+                <h3>Exercise 1: Match the words with pictures</h3>
+                <p>Click on the word that matches the picture!</p>
+                <div class="matching-game">
+                    <div class="picture-card" data-word="lion">
+                        <div class="emoji">🦁</div>
+                        <div class="word-options">
+                            <button class="word-btn" data-answer="lion">lion</button>
+                            <button class="word-btn" data-answer="mouse">mouse</button>
+                            <button class="word-btn" data-answer="tree">tree</button>
+                        </div>
+                    </div>
+                    <div class="picture-card" data-word="mouse">
+                        <div class="emoji">🐭</div>
+                        <div class="word-options">
+                            <button class="word-btn" data-answer="net">net</button>
+                            <button class="word-btn" data-answer="mouse">mouse</button>
+                            <button class="word-btn" data-answer="hunter">hunter</button>
+                        </div>
+                    </div>
+                    <div class="picture-card" data-word="tree">
+                        <div class="emoji">🌳</div>
+                        <div class="word-options">
+                            <button class="word-btn" data-answer="tree">tree</button>
+                            <button class="word-btn" data-answer="teeth">teeth</button>
+                            <button class="word-btn" data-answer="friend">friend</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="exercise-result" id="vocab1-result"></div>
+            </div>
+
+            <div class="vocab-exercise" id="vocab2">
+                <h3>Exercise 2: Complete the sentences</h3>
+                <p>Choose the correct word to complete each sentence!</p>
+                <div class="sentence-completion">
+                    <div class="sentence-item">
+                        <p>The lion <select class="word-select" data-correct="sleeps">
+                            <option value="">Choose...</option>
+                            <option value="runs">runs</option>
+                            <option value="sleeps">sleeps</option>
+                            <option value="flies">flies</option>
+                        </select> under the tree.</p>
+                    </div>
+                    <div class="sentence-item">
+                        <p>The mouse has sharp <select class="word-select" data-correct="teeth">
+                            <option value="">Choose...</option>
+                            <option value="eyes">eyes</option>
+                            <option value="teeth">teeth</option>
+                            <option value="ears">ears</option>
+                        </select> to cut the net.</p>
+                    </div>
+                    <div class="sentence-item">
+                        <p>The <select class="word-select" data-correct="hunters">
+                            <option value="">Choose...</option>
+                            <option value="hunters">hunters</option>
+                            <option value="animals">animals</option>
+                            <option value="birds">birds</option>
+                        </select> catch the lion in a net.</p>
+                    </div>
+                </div>
+                <button class="check-vocab-btn" onclick="checkSentences()">Check Sentences! ✏️</button>
+                <div class="exercise-result" id="vocab2-result"></div>
+            </div>
+
+            <div class="vocab-exercise" id="vocab3">
+                <h3>Exercise 3: Drag and Drop</h3>
+                <p>Drag the words to match their meanings!</p>
+                <div class="drag-drop-game">
+                    <div class="meanings-column">
+                        <div class="meaning-box" data-word="brave">
+                            <span>not afraid</span>
+                            <div class="drop-zone" id="drop-brave"></div>
+                        </div>
+                        <div class="meaning-box" data-word="sharp">
+                            <span>can cut things</span>
+                            <div class="drop-zone" id="drop-sharp"></div>
+                        </div>
+                        <div class="meaning-box" data-word="roar">
+                            <span>lion's loud sound</span>
+                            <div class="drop-zone" id="drop-roar"></div>
+                        </div>
+                        <div class="meaning-box" data-word="free">
+                            <span>not caught</span>
+                            <div class="drop-zone" id="drop-free"></div>
+                        </div>
+                    </div>
+                    <div class="words-column">
+                        <div class="draggable-word" draggable="true" data-word="brave">brave</div>
+                        <div class="draggable-word" draggable="true" data-word="sharp">sharp</div>
+                        <div class="draggable-word" draggable="true" data-word="roar">roar</div>
+                        <div class="draggable-word" draggable="true" data-word="free">free</div>
+                    </div>
+                </div>
+                <button class="check-vocab-btn" onclick="checkDragDrop()">Check Matches! 🎯</button>
+                <div class="exercise-result" id="vocab3-result"></div>
+            </div>
+
+            <div class="vocab-exercise" id="vocab4">
+                <h3>Exercise 4: Memory Game</h3>
+                <p>Click on cards to find matching pairs!</p>
+                <div class="memory-game">
+                    <div class="memory-card" data-word="catch">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">catch</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="catch-meaning">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">to grab</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="help">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">help</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="help-meaning">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">to assist</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="laugh">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">laugh</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="laugh-meaning">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">to smile & sound</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="friend">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">friend</div>
+                        </div>
+                    </div>
+                    <div class="memory-card" data-word="friend-meaning">
+                        <div class="card-inner">
+                            <div class="card-front">?</div>
+                            <div class="card-back">good person</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="check-vocab-btn" onclick="resetMemoryGame()">Reset Game 🔄</button>
+                <div class="exercise-result" id="vocab4-result"></div>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2 class="quiz-title">🎯 Test Your Understanding!</h2>
+            
+            <div class="question" id="q1">
+                <h3>1. Where does the lion sleep?</h3>
+                <div class="options">
+                    <div class="option" data-answer="a">a) In a cave</div>
+                    <div class="option" data-answer="b">b) Under a tree</div>
+                    <div class="option" data-answer="c">c) In the water</div>
+                </div>
+            </div>
+
+            <div class="question" id="q2">
+                <h3>2. What does the mouse do to wake up the lion?</h3>
+                <div class="options">
+                    <div class="option" data-answer="a">a) She sings a song</div>
+                    <div class="option" data-answer="b">b) She runs across his nose</div>
+                    <div class="option" data-answer="c">c) She makes a loud noise</div>
+                </div>
+            </div>
+
+            <div class="question" id="q3">
+                <h3>3. What does the lion do when he catches the mouse?</h3>
+                <div class="options">
+                    <div class="option" data-answer="a">a) He eats her immediately</div>
+                    <div class="option" data-answer="b">b) He lets her go</div>
+                    <div class="option" data-answer="c">c) He puts her in a cage</div>
+                </div>
+            </div>
+
+            <div class="question" id="q4">
+                <h3>4. Who catches the lion?</h3>
+                <div class="options">
+                    <div class="option" data-answer="a">a) Other animals</div>
+                    <div class="option" data-answer="b">b) The mouse</div>
+                    <div class="option" data-answer="c">c) Hunters</div>
+                </div>
+            </div>
+
+            <div class="question" id="q5">
+                <h3>5. How does the mouse help the lion?</h3>
+                <div class="options">
+                    <div class="option" data-answer="a">a) She calls for help</div>
+                    <div class="option" data-answer="b">b) She cuts the net with her teeth</div>
+                    <div class="option" data-answer="c">c) She brings other animals</div>
+                </div>
+            </div>
+
+            <button class="check-btn" onclick="checkAnswers()">Check My Answers! 🎉</button>
+            <button class="reset-btn" onclick="resetQuiz()">Try Again 🔄</button>
+            
+            <div id="results"></div>
+            <div id="score"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'c',
+            q5: 'b'
+        };
+
+        let selectedAnswers = {};
+
+        // Add click event listeners to all options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const questionId = question.id;
+                
+                // Remove selected class from all options in this question
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Store the selected answer
+                selectedAnswers[questionId] = this.dataset.answer;
+            });
+        });
+
+        function checkAnswers() {
+            let correct = 0;
+            const total = Object.keys(correctAnswers).length;
+            
+            // Clear previous results
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            // Check each question
+            Object.keys(correctAnswers).forEach(questionId => {
+                const question = document.getElementById(questionId);
+                const options = question.querySelectorAll('.option');
+                
+                options.forEach(option => {
+                    const answer = option.dataset.answer;
+                    if (answer === correctAnswers[questionId]) {
+                        option.classList.add('correct');
+                        if (selectedAnswers[questionId] === answer) {
+                            correct++;
+                        }
+                    } else if (selectedAnswers[questionId] === answer) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            });
+            
+            // Show results
+            const percentage = Math.round((correct / total) * 100);
+            let message, emoji, resultClass;
+            
+            if (percentage >= 80) {
+                message = "Excellent! You understand the story very well!";
+                emoji = "🌟";
+                resultClass = "correct";
+            } else if (percentage >= 60) {
+                message = "Good job! You can try again to get a better score!";
+                emoji = "👍";
+                resultClass = "correct";
+            } else {
+                message = "Keep trying! Read the story again and try once more!";
+                emoji = "💪";
+                resultClass = "incorrect";
+            }
+            
+            document.getElementById('results').innerHTML = `
+                <div class="result ${resultClass}">
+                    ${emoji} ${message}
+                </div>
+            `;
+            
+            document.getElementById('score').innerHTML = `
+                <div class="score">
+                    Your Score: ${correct}/${total} (${percentage}%)
+                </div>
+            `;
+        }
+
+        function resetQuiz() {
+            selectedAnswers = {};
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('score').innerHTML = '';
+        }
+
+        // Vocabulary Exercise 1: Picture Matching
+        let vocab1Correct = 0;
+        document.querySelectorAll('.word-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.picture-card');
+                const correctWord = card.dataset.word;
+                const selectedWord = this.dataset.answer;
+                
+                // Remove previous selections
+                card.querySelectorAll('.word-btn').forEach(b => {
+                    b.classList.remove('correct', 'incorrect');
+                });
+                
+                if (selectedWord === correctWord) {
+                    this.classList.add('correct');
+                    vocab1Correct++;
+                } else {
+                    this.classList.add('incorrect');
+                    // Show correct answer
+                    card.querySelector(`[data-answer="${correctWord}"]`).classList.add('correct');
+                }
+                
+                // Check if all are done
+                if (card.parentElement.querySelectorAll('.word-btn.correct').length === 3) {
+                    document.getElementById('vocab1-result').innerHTML = `
+                        <div class="exercise-result correct">
+                            🎉 Great job! You matched all the pictures correctly!
+                        </div>
+                    `;
+                }
+            });
+        });
+
+        // Vocabulary Exercise 2: Sentence Completion
+        function checkSentences() {
+            const selects = document.querySelectorAll('.word-select');
+            let correct = 0;
+            
+            selects.forEach(select => {
+                const selectedValue = select.value;
+                const correctValue = select.dataset.correct;
+                
+                if (selectedValue === correctValue) {
+                    select.classList.add('correct');
+                    select.classList.remove('incorrect');
+                    correct++;
+                } else {
+                    select.classList.add('incorrect');
+                    select.classList.remove('correct');
+                }
+            });
+            
+            const resultDiv = document.getElementById('vocab2-result');
+            if (correct === selects.length) {
+                resultDiv.innerHTML = `
+                    <div class="exercise-result correct">
+                        🌟 Perfect! All sentences are completed correctly!
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="exercise-result incorrect">
+                        💪 Good try! You got ${correct}/${selects.length} correct. Try again!
+                    </div>
+                `;
+            }
+        }
+
+        // Vocabulary Exercise 3: Drag and Drop
+        let draggedElement = null;
+        
+        document.querySelectorAll('.draggable-word').forEach(word => {
+            word.addEventListener('dragstart', function(e) {
+                draggedElement = this;
+                this.classList.add('dragging');
+            });
+            
+            word.addEventListener('dragend', function(e) {
+                this.classList.remove('dragging');
+            });
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            zone.addEventListener('dragleave', function(e) {
+                this.classList.remove('drag-over');
+            });
+            
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (draggedElement) {
+                    this.appendChild(draggedElement);
+                    draggedElement = null;
+                }
+            });
+        });
+
+        function checkDragDrop() {
+            const dropZones = document.querySelectorAll('.drop-zone');
+            let correct = 0;
+            
+            dropZones.forEach(zone => {
+                const zoneId = zone.id;
+                const expectedWord = zoneId.replace('drop-', '');
+                const droppedWord = zone.querySelector('.draggable-word');
+                
+                if (droppedWord && droppedWord.dataset.word === expectedWord) {
+                    zone.classList.add('correct');
+                    correct++;
+                } else {
+                    zone.classList.remove('correct');
+                }
+            });
+            
+            const resultDiv = document.getElementById('vocab3-result');
+            if (correct === dropZones.length) {
+                resultDiv.innerHTML = `
+                    <div class="exercise-result correct">
+                        🎯 Excellent! All words are matched correctly!
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="exercise-result incorrect">
+                        🤔 You got ${correct}/${dropZones.length} correct. Try moving the words around!
+                    </div>
+                `;
+            }
+        }
+
+        // Vocabulary Exercise 4: Memory Game
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const totalPairs = 4;
+
+        document.querySelectorAll('.memory-card').forEach(card => {
+            card.addEventListener('click', function() {
+                if (this.classList.contains('flipped') || this.classList.contains('matched')) return;
+                
+                this.classList.add('flipped');
+                flippedCards.push(this);
+                
+                if (flippedCards.length === 2) {
+                    setTimeout(() => {
+                        checkMemoryMatch();
+                    }, 1000);
+                }
+            });
+        });
+
+        function checkMemoryMatch() {
+            const card1 = flippedCards[0];
+            const card2 = flippedCards[1];
+            const word1 = card1.dataset.word;
+            const word2 = card2.dataset.word;
+            
+            // Check if they match (word and its meaning)
+            if ((word1 === 'catch' && word2 === 'catch-meaning') ||
+                (word1 === 'catch-meaning' && word2 === 'catch') ||
+                (word1 === 'help' && word2 === 'help-meaning') ||
+                (word1 === 'help-meaning' && word2 === 'help') ||
+                (word1 === 'laugh' && word2 === 'laugh-meaning') ||
+                (word1 === 'laugh-meaning' && word2 === 'laugh') ||
+                (word1 === 'friend' && word2 === 'friend-meaning') ||
+                (word1 === 'friend-meaning' && word2 === 'friend')) {
+                
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                
+                if (matchedPairs === totalPairs) {
+                    document.getElementById('vocab4-result').innerHTML = `
+                        <div class="exercise-result correct">
+                            🎊 Fantastic! You found all the matching pairs!
+                        </div>
+                    `;
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+            }
+            
+            flippedCards = [];
+        }
+
+        function resetMemoryGame() {
+            document.querySelectorAll('.memory-card').forEach(card => {
+                card.classList.remove('flipped', 'matched');
+            });
+            flippedCards = [];
+            matchedPairs = 0;
+            document.getElementById('vocab4-result').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
